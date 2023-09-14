@@ -51,6 +51,9 @@ jobs:
           path: dist
   deploy:
     needs: build
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Get code
@@ -62,14 +65,16 @@ jobs:
           path: ./dist
       - name: Output contents
         run: ls
+      - name: Get AWS permissions
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::748493488945:role/GitHubDemo
+          aws-region: eu-central-1
       - name: Deploy site
         id: deploy
         uses: moonyc/docker-action@v1.1
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         with:
-          bucket: moonyc-gha-custom-action-hosting
+          bucket: moonyc-openid-demo
           bucket-region: 'eu-central-1'
           dist-folder: ./dist
           html-file: index.html
