@@ -72,6 +72,7 @@ jobs:
           bucket: moonyc-gha-custom-action-hosting
           bucket-region: 'eu-central-1'
           dist-folder: ./dist
+          html-file: 'index.html'
       - name: Output information
         run: |
           echo "Live URL: ${{ steps.deploy.outputs.website-url }}"
